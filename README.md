@@ -45,25 +45,14 @@ A simple Flask application for managing a collection of books. This application 
    pip install -r requirements.txt
    ```
 
-3. Create the database:
-   - Log in to your MySQL server and run the `books.sql` script to set up the database and table.
+3. Set up the database manually: (Optional)
    ```bash
-   mysql -u your_user -p < books.sql
+   mysql -u flask_user -p 
    ```
-
-4. Create a `.env` file in the root directory and add the following environment variables:
-   ```env
-   MYSQL_HOST=localhost
-   MYSQL_USER=your_mysql_user
-   MYSQL_PASSWORD=your_mysql_password
-   MYSQL_DB=flask_books
-   ```
-
 5. Run the application:
    ```bash
    python app.py
    ```
-
 6. Open your browser and visit `http://127.0.0.1:5000` to use the app.
 
 ## Usage
