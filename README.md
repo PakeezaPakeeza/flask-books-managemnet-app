@@ -15,7 +15,7 @@ A simple Flask application for managing a collection of books. This application 
     |-- delete.html    # Template for deleting a book
     |-- index.html     # Homepage template displaying the list of books
     |-- update.html    # Template for updating a book
-|-- .env               # Environment variables for database configuration (not included in the repo)
+|-- .env               # Environment variables for database configuration
 ```
 
 ## Features
