@@ -30,13 +30,9 @@ All book data is stored in a **MySQL database**. The application uses **Flask** 
 │   ├── add_book.html      # Add a new book
 │   ├── update.html        # Update an existing book
 │   ├── delete.html        # Confirm book deletion
-├── 📂 static/                # Static assets (optional CSS/JS)
 ├── 📜 books.sql              # SQL script for database setup
 ├── 📜 README.md              # Project documentation
 ```
-
----
-
 ## 🚀 **Getting Started**
 
 ### 📝 **1. Prerequisites**
@@ -95,30 +91,6 @@ Visit the application in your browser:
 ```plaintext
 http://127.0.0.1:5000
 ```
-
----
-
-## 🌟 **Features**
-
-### 🖥️ **1. Homepage**
-- Displays a list of books stored in the database.
-- Includes "Edit" and "Delete" buttons for each book.
-
-### ➕ **2. Add a Book**
-- Navigate to `/add_book` to add new books via a form.
-
-### ✏️ **3. Edit a Book**
-- Update existing book details via `/update_book/<id>`.
-
-### ❌ **4. Delete a Book**
-- Delete books with confirmation via `/delete_book/<id>`.
-
-### 📊 **5. API Endpoint**
-Access all books in JSON format:
-```plaintext
-GET /api/books
-```
-
 ---
 
 ## 🎨 **Screenshots**
@@ -127,37 +99,6 @@ GET /api/books
 
 ### **Add a Book**
 ![Add Book](https://via.placeholder.com/800x400?text=Add+Book+Form)
-
----
-
-## ⚡ **Environment Variables Example**
-Use the following `.env` file format:
-```plaintext
-MYSQL_HOST=localhost
-MYSQL_USER=flask_user
-MYSQL_PASSWORD=your_password
-MYSQL_DB=flask_books
-```
-
----
-
-## 📜 **SQL Setup**
-Here’s the `books.sql` file to set up your database:
-```sql
-CREATE DATABASE IF NOT EXISTS flask_books;
-USE flask_books;
-
-CREATE TABLE IF NOT EXISTS books (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(100) NOT NULL,
-    author VARCHAR(100) NOT NULL,
-    pages INT NOT NULL,
-    genre VARCHAR(50) NOT NULL,
-    summary TEXT
-);
-```
-
----
 
 ## 🛡️ **License**
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
