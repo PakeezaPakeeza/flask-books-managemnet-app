@@ -62,32 +62,6 @@ A simple Flask application for managing a collection of books. This application 
 - **Edit Book**: Click the "Edit" button next to a book to update its details.
 - **Delete Book**: Click the "Delete" button next to a book to remove it from the collection.
 
-## Database Setup
-
-The `books.sql` file contains the SQL script to create the database and `books` table:
-```sql
-CREATE DATABASE IF NOT EXISTS flask_books;
-USE flask_books;
-
-CREATE TABLE books (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(100),
-    author VARCHAR(100),
-    pages INT,
-    genre VARCHAR(50),
-    summary TEXT
-);
-```
-
-## Environment Variables
-
-Ensure the `.env` file contains the correct credentials for your MySQL server:
-```env
-MYSQL_HOST=localhost
-MYSQL_USER=your_mysql_user
-MYSQL_PASSWORD=your_mysql_password
-MYSQL_DB=flask_books
-```
 
 ## License
 
