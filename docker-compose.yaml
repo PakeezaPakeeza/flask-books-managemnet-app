@@ -1,5 +1,8 @@
 networks:
   booknetwork:
+volumes:
+  volumes:
+  mysql-data:
 
 services:
   flask-web-app:
@@ -18,7 +21,7 @@ services:
       - mysql
     restart: always
     healthcheck:
-      #ye container tab tak up nahi ho ga jab tak isk health check satisfied nahi ho jaty
+      
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-padmin"]
       interval: 10s
       timeout: 20s
@@ -37,4 +40,6 @@ services:
       MYSQL_ROOT_PASSWORD: root
     networks:
       - booknetwork
+    volumes:
+      - mysql-data:/var/lib/mysql
   
