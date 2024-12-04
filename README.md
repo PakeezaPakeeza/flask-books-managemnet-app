@@ -55,14 +55,21 @@ A simple Flask application for managing a collection of books. This application 
    ```
 6. Open your browser and visit `http://127.0.0.1:5000` to use the app.
 
-## Installation with docker run command
-1- docker run -d -p 5000:5000 --network booknet --name flask-cont flaskbook-img:latest
-2- docker run --name mysql-container 
-               -e MYSQL_ROOT_PASSWORD=root_password     
-               -e MYSQL_DATABASE=flask_books    
-               -e MYSQL_USER=flask_user     
-               -e MYSQL_PASSWORD=admin --network booknet -d mysql:latest
-               
+## Installation with Docker Run
+Step 1: Start the Flask App
+bash
+Copy code
+docker run -d -p 5000:5000 --network booknet --name flask-cont flaskbook-img:latest
+Step 2: Start the MySQL Database
+bash
+Copy code
+docker run -d --name mysql-container \
+  -e MYSQL_ROOT_PASSWORD=root_password \
+  -e MYSQL_DATABASE=flask_books \
+  -e MYSQL_USER=flask_user \
+  -e MYSQL_PASSWORD=admin \
+  --network booknet mysql:latest
+
 ## Installation using docker compose
 docker-compose up -d
 http://127.0.0.1:5000
