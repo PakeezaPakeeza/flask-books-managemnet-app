@@ -1,15 +1,19 @@
 import os
 from flask import Flask, render_template, request, redirect, flash, jsonify
 from flask_mysqldb import MySQL
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-# Configure MySQL from environment variables
-app.config['MYSQL_HOST'] = os.environ.get('MYSQL_HOST', 'localhost')
-app.config['MYSQL_USER'] = os.environ.get('MYSQL_USER', 'flask_user')
-app.config['MYSQL_PASSWORD'] = os.environ.get('MYSQL_PASSWORD', 'password')
-app.config['MYSQL_DB'] = os.environ.get('MYSQL_DB', 'flask_books')
+# Configure MySQL using environment variables
+app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST', 'localhost')
+app.config['MYSQL_USER'] = os.getenv('MYSQL_USER', 'flask_user')
+app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD', 'password')
+app.config['MYSQL_DB'] = os.getenv('MYSQL_DB', 'flask_books')
 
 # Initialize MySQL
 mysql = MySQL(app)
@@ -31,6 +35,17 @@ def init_db():
         mysql.connection.commit()
         cur.close()
 
+# Helper function to convert a tuple into a dictionary
+def book_to_dict(book):
+    return {
+        'id': book[0],
+        'title': book[1],
+        'author': book[2],
+        'pages': book[3],
+        'genre': book[4],
+        'summary': book[5]
+    }
+
 # Routes
 @app.route('/')
 def index():
@@ -41,6 +56,9 @@ def index():
     cur.execute('SELECT * FROM books')
     books = cur.fetchall()
     cur.close()
+
+    # Convert tuples to dictionaries
+    books = [book_to_dict(book) for book in books]
     return render_template('index.html', data=books)
 
 @app.route('/add_book', methods=['GET', 'POST'])
@@ -73,24 +91,34 @@ def update_book(book_id):
     cur = mysql.connection.cursor()
     cur.execute('SELECT * FROM books WHERE id = %s', (book_id,))
     book = cur.fetchone()
-    if book:
-        if request.method == 'POST':
-            title = request.form.get('title')
-            author = request.form.get('author')
-            pages = request.form.get('pages')
-            genre = request.form.get('genre')
-            summary = request.form.get('summary')
-            cur.execute(
-                'UPDATE books SET title = %s, author = %s, pages = %s, genre = %s, summary = %s WHERE id = %s',
-                (title, author, pages, genre, summary, book_id)
-            )
-            mysql.connection.commit()
-            cur.close()
-            flash('Book updated successfully!', 'success')
-            return redirect('/')
-        return render_template('update.html', book=book)
-    flash(f'Book with id {book_id} not found', 'danger')
-    return redirect('/')
+    cur.close()
+
+    if not book:
+        flash(f'Book with ID {book_id} not found.', 'danger')
+        return redirect('/')
+
+    # Convert tuple to dictionary
+    book_dict = book_to_dict(book)
+
+    if request.method == 'POST':
+        title = request.form.get('title')
+        author = request.form.get('author')
+        pages = request.form.get('pages')
+        genre = request.form.get('genre')
+        summary = request.form.get('summary')
+
+        cur = mysql.connection.cursor()
+        cur.execute(
+            'UPDATE books SET title = %s, author = %s, pages = %s, genre = %s, summary = %s WHERE id = %s',
+            (title, author, pages, genre, summary, book_id)
+        )
+        mysql.connection.commit()
+        cur.close()
+
+        flash('Book updated successfully!', 'success')
+        return redirect('/')
+
+    return render_template('update.html', book=book_dict)
 
 @app.route('/delete_book/<int:book_id>', methods=['GET', 'POST'])
 def delete_book(book_id):
@@ -100,18 +128,26 @@ def delete_book(book_id):
     cur = mysql.connection.cursor()
     cur.execute('SELECT * FROM books WHERE id = %s', (book_id,))
     book = cur.fetchone()
-    if book:
-        if request.method == 'POST':
-            cur.execute('DELETE FROM books WHERE id = %s', (book_id,))
-            mysql.connection.commit()
-            cur.close()
-            flash('Book deleted successfully!', 'success')
-            return redirect('/')
-        return render_template('delete.html', book=book)
-    flash(f'Book with id {book_id} not found', 'danger')
-    return redirect('/')
+    cur.close()
 
-# API route (optional)
+    if not book:
+        flash(f'Book with ID {book_id} not found.', 'danger')
+        return redirect('/')
+
+    # Convert tuple to dictionary
+    book_dict = book_to_dict(book)
+
+    if request.method == 'POST':
+        cur = mysql.connection.cursor()
+        cur.execute('DELETE FROM books WHERE id = %s', (book_id,))
+        mysql.connection.commit()
+        cur.close()
+
+        flash('Book deleted successfully!', 'success')
+        return redirect('/')
+
+    return render_template('delete.html', book=book_dict)
+
 @app.route('/api/books', methods=['GET'])
 def api_books():
     """
@@ -121,6 +157,9 @@ def api_books():
     cur.execute('SELECT * FROM books')
     books = cur.fetchall()
     cur.close()
+
+    # Convert tuples to dictionaries
+    books = [book_to_dict(book) for book in books]
     return jsonify(books)
 
 if __name__ == '__main__':
