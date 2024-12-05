@@ -17,16 +17,14 @@ services:
       MYSQL_USER: flask_user
       MYSQL_PASSWORD: admin
       MYSQL_DB: flask_books
+
     depends_on:
-      - mysql
-    restart: always
-    healthcheck:
+       mysql:
+        condition: service_healthy # Wait until MySQL is healthy
+
+    
+
       
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-padmin"]
-      interval: 10s
-      timeout: 20s
-      retries: 10
-      start_period: 60s
   #mysql container
   mysql:
     image: mysql:latest
@@ -42,4 +40,12 @@ services:
       - booknetwork
     volumes:
       - mysql-data:/var/lib/mysql
+
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-padmin"]
+      interval: 10s
+      timeout: 20s
+      retries: 10
+      start_period: 60s
   

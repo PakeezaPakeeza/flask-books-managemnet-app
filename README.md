@@ -64,7 +64,7 @@ Step 2: Start the MySQL Database
 bash
 Copy code
 docker run -d --name mysql-container \
-  -e MYSQL_ROOT_PASSWORD=root_password \
+  -e MYSQL_ROOT_PASSWORD=root \
   -e MYSQL_DATABASE=flask_books \
   -e MYSQL_USER=flask_user \
   -e MYSQL_PASSWORD=admin \

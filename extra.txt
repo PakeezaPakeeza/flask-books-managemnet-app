@@ -1,0 +1,23 @@
+mysql-container as a root 
+docker run -d --name mysql-cont -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=flask_books --network booknet mysql
+flask-container as a root 
+docker run -d --name flask-cont -p 5000:5000 --network booknet -e MYSQL_HOST=mysql-cont -e MYSQL_USER=root -e MYSQL_PASSWORD=root -e MYSQL_DB=flask_books flaskbook-img:latest
+
+####################
+mysql-container as an admin 
+$ docker run -d --name mysql-cont --network booknet
+ -e MYSQL_ROOT_PASSWORD=root  
+ -e MYSQL_DATABASE=flask_books
+  -e MYSQL_USER=flask_user -e MYSQL_PASSWORD=admin  mysql:latest
+
+  flask as an admin
+docker run -d --name flask-cont -p 5000:5000
+ -e MYSQL_HOST=mysql-cont 
+ -e MYSQL_USER=flask_user 
+  -e MYSQL_PASSWORD=admin 
+  -e MYSQL_DB=flask_books --network booknet flaskbook-img:latest
+
+
+
+  ###########
+  nohup docker attach <docker-id> &  #give you logs in nohup.out folder
